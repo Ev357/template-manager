@@ -8,4 +8,5 @@ name = "tm"
 path = "src/main.rs"
 
 [dependencies]
+clap = { version = "4.5.51", features = ["derive"] }
 color-eyre = "0.6.5"
