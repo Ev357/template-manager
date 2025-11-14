@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use clap::Parser;
+use clap::{Parser, ValueHint};
 
 use crate::args::parsers::path::path_parser;
 
@@ -11,6 +11,6 @@ pub mod parsers;
 pub struct Args {
     pub template_name: String,
 
-    #[arg(default_value = ".", value_parser = path_parser)]
+    #[arg(default_value = ".", value_parser = path_parser, value_hint = ValueHint::DirPath)]
     pub path: PathBuf,
 }
