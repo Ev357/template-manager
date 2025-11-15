@@ -39,5 +39,10 @@
     in {
       default = pkgs.callPackage ./nix/shell.nix {inherit inputs;};
     });
+
+    homeModules = {
+      default = import ./nix/home-manager.nix {inherit inputs self;};
+      template-manager = self.homeModules.default;
+    };
   };
 }
