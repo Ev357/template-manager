@@ -1,7 +1,7 @@
-use clap::Parser;
+use clap::{CommandFactory, Parser};
 use color_eyre::eyre::Result;
 
-use crate::args::Args;
+use crate::args::{Args, print_completions::print_completions};
 
 mod args;
 
@@ -10,7 +10,13 @@ fn main() -> Result<()> {
 
     let args = Args::parse();
 
-    println!("{:?}", args.path);
+    if args.generate {
+        let mut cmd = Args::command();
+        print_completions(&mut cmd);
+        return Ok(());
+    }
+
+    println!("{args:#?}");
 
     Ok(())
 }
