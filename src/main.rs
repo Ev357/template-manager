@@ -4,6 +4,7 @@ use color_eyre::eyre::Result;
 use crate::args::{Args, print_completions::print_completions};
 
 mod args;
+mod template;
 
 fn main() -> Result<()> {
     color_eyre::install()?;

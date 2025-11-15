@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use clap::{Parser, ValueHint};
 
-use crate::args::parsers::path::path_parser;
+use crate::{args::parsers::path::path_parser, template::Template};
 
 pub mod parsers;
 pub mod print_completions;
@@ -20,7 +20,7 @@ pub struct Args {
 #[derive(clap::Args, Debug)]
 #[group(id = "template")]
 pub struct TemplateArgs {
-    pub template_name: String,
+    pub template_name: Template,
 
     #[arg(default_value = ".", value_parser = path_parser, value_hint = ValueHint::DirPath, requires = "template_name")]
     pub path: PathBuf,
