@@ -8,7 +8,7 @@ pub mod parsers;
 pub mod print_completions;
 
 #[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
+#[command(name = env!("CARGO_BIN_NAME"), version, about, long_about = None)]
 pub struct Args {
     #[command(flatten)]
     pub template: Option<TemplateArgs>,
