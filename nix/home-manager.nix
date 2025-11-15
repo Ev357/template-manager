@@ -21,8 +21,9 @@ in {
   config = lib.mkIf cfg.enable {
     home.packages = [cfg.package];
 
-    programs = let
-      nushellIntegration =
+    programs = {
+      nushell.extraConfig =
+        lib.mkIf cfg.enableNushellIntegration
         # nu
         ''
           source ${
@@ -31,8 +32,6 @@ in {
             ''
           }
         '';
-    in {
-      nushell.extraConfig = lib.mkIf cfg.enableNushellIntegration nushellIntegration;
     };
   };
 }
