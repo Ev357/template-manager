@@ -1,4 +1,4 @@
-use clap::{CommandFactory, Parser};
+use clap::Parser;
 use color_eyre::eyre::Result;
 
 use crate::args::{Args, print_completions::print_completions};
@@ -11,8 +11,7 @@ fn main() -> Result<()> {
     let args = Args::parse();
 
     if args.generate {
-        let mut cmd = Args::command();
-        print_completions(&mut cmd);
+        print_completions();
         return Ok(());
     }
 
