@@ -10,11 +10,14 @@ in
   (pkgs.makeRustPlatform {
     cargo = toolchain;
     rustc = toolchain;
-  }).buildRustPackage {
+  }).buildRustPackage rec {
     pname = "template-manager";
     version = "0.1.0";
 
-    src = ../.;
+    src = builtins.path {
+      path = ../.;
+      name = pname;
+    };
 
     cargoLock.lockFile = ../Cargo.lock;
 
