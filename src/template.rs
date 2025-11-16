@@ -7,6 +7,7 @@ pub enum Template {
     Rust,
     Haskell,
     SimpleHaskell,
+    Python,
 }
 
 impl Display for Template {
@@ -15,6 +16,7 @@ impl Display for Template {
             Template::Rust => write!(f, "rust"),
             Template::Haskell => write!(f, "haskell"),
             Template::SimpleHaskell => write!(f, "simple-haskell"),
+            Template::Python => write!(f, "python"),
         }
     }
 }
