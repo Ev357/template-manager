@@ -24,15 +24,21 @@ pub fn download_files(files: Vec<File>, template_args: &TemplateArgs) -> Result<
 
         let prefix = format!("templates/{}", template_args.template_name);
         let absolute_path = PathBuf::from(&file.path);
-        let path = absolute_path.strip_prefix(&prefix)?;
+        let path_suffix = absolute_path.strip_prefix(&prefix)?;
 
-        let new_path = template_args.path.join(path);
-        if let Some(parent_dir) = new_path.parent() {
+        let target_path = if let Some(path) = &template_args.path {
+            path
+        } else {
+            &PathBuf::from(format!("{}-template", template_args.template_name))
+        };
+
+        let output_path = target_path.join(path_suffix);
+        if let Some(parent_dir) = output_path.parent() {
             fs::create_dir_all(parent_dir)?;
         }
 
         let bytes = response.bytes()?;
-        fs::write(&new_path, &bytes)?;
+        fs::write(&output_path, &bytes)?;
     }
 
     Ok(())

@@ -28,10 +28,9 @@ pub struct TemplateArgs {
     pub template_name: Template,
 
     #[arg(
-        default_value = ".",
-        value_hint = ValueHint::DirPath,
+        help = "The path where to store the template",
         requires = "template_name",
-        help = "The path where to store the template"
+        value_hint = ValueHint::DirPath
     )]
-    pub path: PathBuf,
+    pub path: Option<PathBuf>,
 }
