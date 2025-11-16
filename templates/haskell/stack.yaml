@@ -1,0 +1,9 @@
+resolver: lts-23.27
+system-ghc: true
+
+packages:
+- .
+
+notify-if-nix-on-path: false
+nix:
+  enable: false
