@@ -21,6 +21,13 @@ in
 
     cargoLock.lockFile = ../Cargo.lock;
 
+    buildInputs = with pkgs; [
+      openssl
+    ];
+    nativeBuildInputs = with pkgs; [
+      pkg-config
+    ];
+
     meta = {
       description = "A small program for managing programming environment templates";
       homepage = "https://github.com/Ev357/template-manager";
