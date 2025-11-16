@@ -1,4 +1,4 @@
-use color_eyre::eyre::Result;
+use color_eyre::eyre::{Result, eyre};
 use reqwest::{
     blocking::Client,
     header::{ACCEPT, USER_AGENT},
@@ -37,14 +37,23 @@ impl From<DirectoryItem> for File {
 pub fn get_directory_tree(template: &Template) -> Result<Vec<File>> {
     let client = Client::new();
 
-    let data = client
+    let response = client
         .get("https://api.github.com/repos/Ev357/template-manager/git/trees/HEAD?recursive=true")
         .header(ACCEPT, "application/vnd.github+json")
         .header(USER_AGENT, env!("CARGO_PKG_NAME"))
-        .send()?
-        .json::<DirectoryTree>()?;
+        .send()?;
 
-    let files: Vec<File> = data
+    let raw_data = response.bytes()?;
+
+    let data = serde_json::from_slice::<DirectoryTree>(&raw_data);
+
+    if data.is_err() {
+        let text_data = String::from_utf8_lossy(&raw_data);
+
+        return Err(eyre!("Failed to parse response:\n{text_data}"));
+    }
+
+    let files: Vec<File> = data?
         .tree
         .into_iter()
         .filter_map(|item| {

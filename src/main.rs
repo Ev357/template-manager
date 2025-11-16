@@ -25,10 +25,8 @@ fn main() -> Result<()> {
     if let Some(template) = &args.template {
         let files = get_directory_tree(&template.template_name)?;
 
-        download_files(files);
+        download_files(files, template)?;
     }
-
-    println!("{args:#?}");
 
     Ok(())
 }

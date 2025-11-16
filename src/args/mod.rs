@@ -2,9 +2,8 @@ use std::path::PathBuf;
 
 use clap::{Parser, ValueHint};
 
-use crate::{args::parsers::path::path_parser, template::Template};
+use crate::template::Template;
 
-pub mod parsers;
 pub mod print_completions;
 
 #[derive(Parser, Debug)]
@@ -30,7 +29,6 @@ pub struct TemplateArgs {
 
     #[arg(
         default_value = ".",
-        value_parser = path_parser,
         value_hint = ValueHint::DirPath,
         requires = "template_name",
         help = "The path where to store the template"
