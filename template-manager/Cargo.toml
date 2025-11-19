@@ -15,4 +15,4 @@ color-eyre = "0.6.5"
 reqwest = { version = "0.12.24", features = ["blocking", "rustls-tls" ], default-features = false }
 serde = "1.0.228"
 serde_json = "1.0.145"
-template-manager_macro_derive = { path = "../template-manager_macro_derive" }
+template-manager_macro_derive = { path = "../template-manager-codegen" }
