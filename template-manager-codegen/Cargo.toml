@@ -1,5 +1,5 @@
 [package]
-name = "template-manager_macro_derive"
+name = "template-manager-codegen"
 version = "0.1.0"
 edition = "2024"
 

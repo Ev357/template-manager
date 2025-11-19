@@ -1097,11 +1097,11 @@ dependencies = [
  "reqwest",
  "serde",
  "serde_json",
- "template-manager_macro_derive",
+ "template-manager-codegen",
 ]
 
 [[package]]
-name = "template-manager_macro_derive"
+name = "template-manager-codegen"
 version = "0.1.0"
 dependencies = [
  "quote",

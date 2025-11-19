@@ -1,5 +1,5 @@
 use clap::ValueEnum;
-use template_manager_macro_derive::TemplateMacro;
+use template_manager_codegen::TemplateMacro;
 
 #[derive(ValueEnum, TemplateMacro, Clone, Debug)]
 pub enum Template {
