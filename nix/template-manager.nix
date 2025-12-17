@@ -2,10 +2,9 @@
   lib,
   inputs,
   pkgs,
-  system,
   ...
 }: let
-  toolchain = inputs.fenix.packages.${system}.minimal.toolchain;
+  toolchain = inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.minimal.toolchain;
 in
   (pkgs.makeRustPlatform {
     cargo = toolchain;
