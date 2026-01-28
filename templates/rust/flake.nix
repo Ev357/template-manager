@@ -22,7 +22,7 @@
       pkgs = nixpkgs.legacyPackages.${system};
     in {
       default = pkgs.mkShell {
-        buildInputs = with pkgs.extend fenix.overlays.default; [
+        packages = with pkgs.extend fenix.overlays.default; [
           fenix.packages.${system}.default.toolchain
           rust-analyzer-nightly
         ];

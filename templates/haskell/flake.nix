@@ -16,7 +16,7 @@
       ghcVersion = "98";
     in {
       default = pkgs.mkShell {
-        buildInputs = with pkgs; [
+        packages = with pkgs; [
           stack
           haskell.compiler."ghc${ghcVersion}"
           (haskell-language-server.override {supportedGhcVersions = [ghcVersion];})
