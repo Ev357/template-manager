@@ -10,23 +10,29 @@
   };
 
   outputs = {
+    self,
     nixpkgs,
     fenix,
     ...
-  }: let
+  } @ inputs: let
     forAllSystems = nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed;
   in {
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
 
-    devShells = forAllSystems (system: let
+    packages = forAllSystems (system: let
       pkgs = nixpkgs.legacyPackages.${system};
     in {
-      default = pkgs.mkShell {
-        packages = with pkgs.extend fenix.overlays.default; [
-          fenix.packages.${system}.default.toolchain
-          rust-analyzer-nightly
-        ];
+      rust-template = pkgs.callPackage ./nix/rust-template.nix {inherit inputs;};
+      default = self.packages.${system}.rust-template;
+    });
+
+    devShells = forAllSystems (system: let
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [fenix.overlays.default];
       };
+    in {
+      default = pkgs.callPackage ./nix/shell.nix {inherit inputs;};
     });
   };
 }
