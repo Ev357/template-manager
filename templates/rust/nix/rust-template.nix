@@ -1,10 +1,10 @@
 {
   lib,
-  inputs,
   pkgs,
+  inputs,
   ...
 }: let
-  toolchain = inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.minimal.toolchain;
+  toolchain = inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.default.toolchain;
 in
   (pkgs.makeRustPlatform {
     cargo = toolchain;
@@ -23,6 +23,7 @@ in
     meta = {
       description = "Description";
       homepage = "https://evest.dev";
+      platforms = lib.systems.flakeExposed;
       license = lib.licenses.mit;
       mainProgram = "rust-template";
     };
