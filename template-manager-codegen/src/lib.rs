@@ -6,7 +6,7 @@ use syn::{self, Data};
 
 #[proc_macro_derive(TemplateMacro)]
 pub fn template_macro_derive(input: TokenStream) -> TokenStream {
-    let ast = syn::parse(input).unwrap();
+    let ast = syn::parse_macro_input!(input as syn::DeriveInput);
 
     impl_template_macro(&ast)
 }

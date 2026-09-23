@@ -4,10 +4,8 @@
 }: let
   cargoToml = fromTOML (builtins.readFile ../Cargo.toml);
 
-  pname = cargoToml.workspace.package.name;
-
   commonArgs = {
-    inherit pname;
+    pname = "template-manager";
     version = cargoToml.workspace.package.version;
 
     src = craneLib.cleanCargoSource ../.;

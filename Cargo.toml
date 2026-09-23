@@ -4,7 +4,6 @@ members = ["template-manager", "template-manager-codegen"]
 default-members = ["template-manager"]
 
 [workspace.package]
-name = "template-manager"
 description = "A small program for managing programming environment templates"
 edition = "2024"
 version = "1.0.0"

@@ -1,6 +1,6 @@
 [package]
 name = "template-manager"
-description = "A small program for managing programming environment templates"
+description.workspace = true
 version.workspace = true
 edition.workspace = true
 license.workspace = true
