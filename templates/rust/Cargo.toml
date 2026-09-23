@@ -1,6 +1,9 @@
 [package]
 name = "rust-template"
+description = "Description"
 version = "0.1.0"
 edition = "2024"
+license = "MIT"
+homepage = "https://evest.dev"
 
 [dependencies]

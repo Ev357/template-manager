@@ -14,6 +14,7 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    crane.url = "github:ipetkov/crane";
     fenix = {
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,27 +24,52 @@
   outputs = {
     self,
     nixpkgs,
+    crane,
     fenix,
     ...
-  } @ inputs: let
+  }: let
     forAllSystems = nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed;
+
+    mkPerSystem = perSystem:
+      forAllSystems (system: let
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [
+            self.overlays.default
+            fenix.overlays.default
+          ];
+        };
+
+        craneLib = (crane.mkLib pkgs).overrideToolchain fenix.packages.${system}.default.toolchain;
+      in
+        perSystem {inherit pkgs craneLib system;});
   in {
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
 
-    packages = forAllSystems (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      rust-template = pkgs.callPackage ./nix/rust-template.nix {inherit inputs;};
+    packages = mkPerSystem ({
+      pkgs,
+      craneLib,
+      system,
+    }: {
+      rust-template = pkgs.callPackage ./nix/rust-template.nix {inherit craneLib;};
       default = self.packages.${system}.rust-template;
     });
 
-    devShells = forAllSystems (system: let
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [fenix.overlays.default];
-      };
-    in {
-      default = pkgs.callPackage ./nix/shell.nix {inherit inputs;};
+    devShells = mkPerSystem ({
+      pkgs,
+      craneLib,
+      ...
+    }: {
+      default = pkgs.callPackage ./nix/shell.nix {inherit craneLib;};
     });
+
+    overlays = {
+      rust-template = final: _: let
+        system = final.stdenv.hostPlatform.system;
+      in {
+        rust-template = self.packages.${system}.rust-template;
+      };
+      default = self.overlays.rust-template;
+    };
   };
 }

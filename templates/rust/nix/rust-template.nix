@@ -1,30 +1,33 @@
 {
   lib,
-  pkgs,
-  inputs,
-  ...
+  craneLib,
 }: let
-  toolchain = inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.default.toolchain;
+  cargoToml = fromTOML (builtins.readFile ../Cargo.toml);
+
+  pname = cargoToml.package.name;
+
+  commonArgs = {
+    inherit pname;
+    version = cargoToml.package.version;
+
+    src = craneLib.cleanCargoSource ../.;
+
+    strictDeps = true;
+  };
+
+  cargoArtifacts = craneLib.buildDepsOnly commonArgs;
 in
-  (pkgs.makeRustPlatform {
-    cargo = toolchain;
-    rustc = toolchain;
-  }).buildRustPackage rec {
-    pname = "rust-template";
-    version = "0.1.0";
+  craneLib.buildPackage (
+    commonArgs
+    // {
+      inherit cargoArtifacts;
 
-    src = builtins.path {
-      path = ../.;
-      name = pname;
-    };
-
-    cargoLock.lockFile = ../Cargo.lock;
-
-    meta = {
-      description = "Description";
-      homepage = "https://evest.dev";
-      platforms = lib.systems.flakeExposed;
-      license = lib.licenses.mit;
-      mainProgram = "rust-template";
-    };
-  }
+      meta = {
+        description = cargoToml.package.description;
+        homepage = cargoToml.package.homepage;
+        platforms = lib.systems.flakeExposed;
+        license = lib.licenses.mit;
+        mainProgram = pname;
+      };
+    }
+  )
