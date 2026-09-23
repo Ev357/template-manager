@@ -1,11 +1,11 @@
 {
-  pkgs,
-  inputs,
-  ...
+  craneLib,
+  rust-analyzer-nightly,
+  taplo,
 }:
-pkgs.mkShell {
-  packages = with pkgs.extend inputs.fenix.overlays.default; [
-    inputs.fenix.packages.${stdenv.hostPlatform.system}.default.toolchain
+craneLib.devShell {
+  packages = [
     rust-analyzer-nightly
+    taplo
   ];
 }

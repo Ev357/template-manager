@@ -1,30 +1,33 @@
 {
   lib,
-  pkgs,
-  inputs,
-  ...
+  craneLib,
 }: let
-  toolchain = inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.default.toolchain;
+  cargoToml = fromTOML (builtins.readFile ../Cargo.toml);
+
+  pname = cargoToml.workspace.package.name;
+
+  commonArgs = {
+    inherit pname;
+    version = cargoToml.workspace.package.version;
+
+    src = craneLib.cleanCargoSource ../.;
+
+    strictDeps = true;
+  };
+
+  cargoArtifacts = craneLib.buildDepsOnly commonArgs;
 in
-  (pkgs.makeRustPlatform {
-    cargo = toolchain;
-    rustc = toolchain;
-  }).buildRustPackage rec {
-    pname = "template-manager";
-    version = "1.0.0";
+  craneLib.buildPackage (
+    commonArgs
+    // {
+      inherit cargoArtifacts;
 
-    src = builtins.path {
-      path = ../.;
-      name = pname;
-    };
-
-    cargoLock.lockFile = ../Cargo.lock;
-
-    meta = {
-      description = "A small program for managing programming environment templates";
-      homepage = "https://github.com/Ev357/template-manager";
-      platforms = lib.systems.flakeExposed;
-      license = lib.licenses.mit;
-      mainProgram = "tm";
-    };
-  }
+      meta = {
+        description = cargoToml.workspace.package.description;
+        homepage = cargoToml.workspace.package.repository;
+        platforms = lib.systems.flakeExposed;
+        license = lib.licenses.mit;
+        mainProgram = "tm";
+      };
+    }
+  )
