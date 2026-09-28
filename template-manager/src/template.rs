@@ -7,4 +7,5 @@ pub enum Template {
     Haskell,
     SimpleHaskell,
     Python,
+    Csharp,
 }
