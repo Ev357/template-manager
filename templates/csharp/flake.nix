@@ -1,5 +1,5 @@
 {
-  description = "pb006";
+  description = "csharp-template";
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
