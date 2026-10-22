@@ -8,4 +8,5 @@ pub enum Template {
     SimpleHaskell,
     Python,
     Csharp,
+    Go,
 }
